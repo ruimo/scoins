@@ -21,11 +21,39 @@ class LoanPatternSpec extends Specification {
       } === Success("World")
     }
 
+    "success for using" in {
+      import LoanPattern.using
+      import LoanPattern.autoCloseableCloser
+
+      val resource = new java.io.BufferedReader(new java.io.StringReader("Hello"))
+      using(resource) { res =>
+        res.readLine === "Hello"
+        res.readLine === null
+        "World"
+      } === Success("World")
+    }
+
     "access error and close ok" in {
       import LoanPattern.withResource
 
       val resource = mock(classOf[Closeable])
       withResource(resource) { res =>
+        throw new Exception("World")
+      } match {
+        case Success(_) => failure
+        case f: Failure[_] =>
+          f.exception.getMessage === "World"
+      }
+      verify(resource).close()
+      1 === 1
+    }
+
+    "access error and close ok for using" in {
+      import LoanPattern.using
+      import LoanPattern.closeableCloser
+
+      val resource = mock(classOf[Closeable])
+      using(resource) { res =>
         throw new Exception("World")
       } match {
         case Success(_) => failure
@@ -43,6 +71,26 @@ class LoanPatternSpec extends Specification {
       when(resource.close()).thenThrow(new IOException("Close"))
 
       withResource(resource) { res =>
+        throw new Exception("World")
+      } match {
+        case Success(_) => failure
+        case f: Failure[_] => {
+          f.exception.getMessage === "Close"
+          f.exception.getSuppressed().length === 1
+          f.exception.getSuppressed()(0).getMessage === "World"
+        }
+      }
+      1 === 1
+    }
+
+    "access error and close error for using" in {
+      import LoanPattern.using
+      import LoanPattern.closeableCloser
+
+      val resource = mock(classOf[Closeable])
+      when(resource.close()).thenThrow(new IOException("Close"))
+
+      using(resource) { res =>
         throw new Exception("World")
       } match {
         case Success(_) => failure

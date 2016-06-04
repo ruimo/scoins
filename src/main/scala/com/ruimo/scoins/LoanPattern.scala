@@ -4,8 +4,34 @@ import scala.util.{Try, Success, Failure}
 import scala.annotation.tailrec
 import java.io.Closeable
 import java.io.Reader
+import scala.language.implicitConversions
 
 object LoanPattern {
+  def using[T, U](resource: T)(f: T => U)(implicit closer: T => Unit): Try[U] =
+    Try(f(resource)) match {
+      case Success(v) => Try {
+        closer(resource)
+        v
+      }
+      case e: Failure[U] => Try {
+        closer(resource)
+      } match {
+        case Success(_) => e
+        case fail: Failure[_] => {
+          fail.exception.addSuppressed(e.exception)
+          fail.asInstanceOf[Failure[U]]
+        }
+      }
+    }
+
+  implicit def autoCloseableCloser(resource: AutoCloseable) {
+    resource.close()
+  }
+
+  implicit def closeableCloser(resource: Closeable) {
+    resource.close()
+  }
+
   def withResource[T <% Closeable, U](resource: T)(f: T => U): Try[U] =
     Try(f(resource)) match {
       case Success(v) => Try {
