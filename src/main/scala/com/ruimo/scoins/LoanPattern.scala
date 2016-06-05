@@ -32,6 +32,7 @@ object LoanPattern {
     resource.close()
   }
 
+  @deprecated("Use using instead.")
   def withResource[T <% Closeable, U](resource: T)(f: T => U): Try[U] =
     Try(f(resource)) match {
       case Success(v) => Try {
