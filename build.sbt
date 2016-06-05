@@ -2,7 +2,7 @@ name := """scoins"""
 
 organization := "com.ruimo"
 
-version := "1.2"
+version := "1.3-SNAPSHOT"
 
 crossScalaVersions := List("2.10.4", "2.11.2") 
 
