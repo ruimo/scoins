@@ -4,7 +4,7 @@ organization := "com.ruimo"
 
 version := "1.5-SNAPSHOT"
 
-crossScalaVersions := List("2.10.4", "2.11.2") 
+crossScalaVersions := List("2.10.4", "2.11.7") 
 
 publishTo := Some(
   Resolver.file(
