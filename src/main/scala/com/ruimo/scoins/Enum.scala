@@ -11,7 +11,7 @@ class EnumHelper[+T <: EnumBase] {
     byOrdinal = byOrdinal.updated(i, e.asInstanceOf[T])
     i
   }
-  def all[U >: T]: immutable.IntMap[U] = byOrdinal.asInstanceOf[immutable.IntMap[U]]
+  def all[U >: T]: immutable.Map[Int, U] = byOrdinal.asInstanceOf[immutable.Map[Int, U]]
 }
 
 class EnumBase(helper: EnumHelper[EnumBase]) {
