@@ -71,7 +71,7 @@ class ZipSpec extends Specification {
     }
 
     "Can deflate files." in {
-      PathUtil.withTempDirectory(None) { dir =>
+      PathUtil.withTempDir(None) { dir =>
         val file1 = dir.resolve("foo.txt")
         Files.write(file1, Arrays.asList("foo"))
         val file2 = dir.resolve("bar.txt")
@@ -83,7 +83,7 @@ class ZipSpec extends Specification {
           List("foo/foo.txt" -> file1, "bar.txt" -> file2)
         )
 
-        PathUtil.withTempDirectory(None) { out =>
+        PathUtil.withTempDir(None) { out =>
           val outFiles = Zip.explode(zipFile, out).get
           outFiles.size === 2
           Files.readAllLines(out.resolve("foo/foo.txt")).get(0) === "foo"

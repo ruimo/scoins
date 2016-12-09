@@ -2,7 +2,7 @@ name := """scoins"""
 
 organization := "com.ruimo"
 
-crossScalaVersions := List("2.10.4", "2.11.7") 
+crossScalaVersions := List("2.10.4", "2.11.8") 
 
 publishTo := Some(
   Resolver.file(
