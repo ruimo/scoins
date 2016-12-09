@@ -3,14 +3,28 @@ package com.ruimo.scoins
 import java.nio.file.{Path, Files}
 import scala.collection.immutable
 import com.ruimo.scoins.LoanPattern.using
-import java.util.zip.{ZipInputStream, ZipEntry}
-import java.io.{File, FileInputStream, IOException}
+import java.util.zip.{ZipInputStream, ZipEntry, ZipOutputStream}
+import java.io.{File, FileInputStream, IOException, FileOutputStream}
 import scala.util.Try
 import scala.annotation.tailrec
 import java.nio.charset.Charset
 
 object Zip {
   val DefaultCharset = Charset.forName("Windows-31j")
+
+  def deflate(
+    zipFile: Path, files: Seq[(String, Path)], fileNameCharset: Charset = DefaultCharset
+  ) {
+    using(
+      new ZipOutputStream(new FileOutputStream(zipFile.toFile), fileNameCharset)
+    ) { zos =>
+      files.foreach { case (entryName, file) =>
+        zos.putNextEntry(new ZipEntry(entryName))
+        Files.copy(file, zos)
+        zos.closeEntry()
+      }
+    } (_.close())
+  }
 
   def explode(
     zipFile: Path, toDir: Path, maxZipEntrySize: Long = 1024 * 1024 * 10,

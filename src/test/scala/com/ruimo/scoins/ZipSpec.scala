@@ -5,6 +5,7 @@ import java.io.IOException
 import java.nio.file.{Paths, Path, Files}
 import java.util.zip.ZipEntry
 import scala.collection.immutable
+import java.util.Arrays
 
 class ZipSpec extends Specification {
   "Zip" should {
@@ -58,6 +59,7 @@ class ZipSpec extends Specification {
         Files.delete(dir)
       }
     }
+
     "Can explode Japanese file." in {
       val dir = Files.createTempDirectory(null)
       val exploded: immutable.Seq[Path] = Zip.explode(Paths.get("testdata/japanese.zip"), dir).get
@@ -66,6 +68,28 @@ class ZipSpec extends Specification {
       val lines = Files.readAllLines(exploded(0))
       lines.size === 1
       lines.get(0) === "test"
+    }
+
+    "Can deflate files." in {
+      PathUtil.withTempDirectory(None) { dir =>
+        val file1 = dir.resolve("foo.txt")
+        Files.write(file1, Arrays.asList("foo"))
+        val file2 = dir.resolve("bar.txt")
+        Files.write(file2, Arrays.asList("bar"))
+        val zipFile = dir.resolve("out.zip")
+
+        Zip.deflate(
+          zipFile,
+          List("foo/foo.txt" -> file1, "bar.txt" -> file2)
+        )
+
+        PathUtil.withTempDirectory(None) { out =>
+          val outFiles = Zip.explode(zipFile, out).get
+          outFiles.size === 2
+          Files.readAllLines(out.resolve("foo/foo.txt")).get(0) === "foo"
+          Files.readAllLines(out.resolve("bar.txt")).get(0) === "bar"
+        }.get
+      }.get
     }
   }
 }
