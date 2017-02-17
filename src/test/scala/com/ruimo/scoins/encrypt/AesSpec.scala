@@ -28,6 +28,12 @@ class AesSpec extends Specification {
       encrypted !== text.getBytes("UTF-8")
       aes.decrypt(encrypted) === text.getBytes("UTF-8")
     }
+
+    "toLength works" in {
+      Aes.toLength(Array[Byte](0, 1, 2), 3) === Array[Byte](0, 1, 2)
+      Aes.toLength(Array[Byte](0, 1, 2), 2) === Array[Byte](0, 1)
+      Aes.toLength(Array[Byte](0, 1, 2), 7) === Array[Byte](0, 1, 2, 0, 1, 2, 0)
+    }
   }
 }
 
