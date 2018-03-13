@@ -2,6 +2,8 @@ package com.ruimo.scoins
 
 case class Percent(value: Double) extends AnyVal {
   def of(that: Double) = value * that / 100
+  def +(that: Percent) = Percent(value + that.value)
+  def -(that: Percent) = Percent(value - that.value)
 }
 
 object Percent {

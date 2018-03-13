@@ -4,6 +4,8 @@ organization := "com.ruimo"
 
 crossScalaVersions := List("2.11.8", "2.12.3") 
 
+scalaVersion := "2.12.3"
+
 publishTo := Some(
   Resolver.file(
     "recoengcommon",
