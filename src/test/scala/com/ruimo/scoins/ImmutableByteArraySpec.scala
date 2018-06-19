@@ -13,6 +13,7 @@ class ImmutableByteArraySpec extends Specification {
       im(1) === 2
       im(2) === 3
       im.length === 3
+      im.toByteArray === a
 
       a(0) = 99
       im(0) === 99

@@ -24,6 +24,8 @@ libraryDependencies ++= Seq(
   "org.mockito" % "mockito-all" % "1.9.5" % "test"
 )
 
+scalacOptions := Seq("-unchecked", "-deprecation", "-feature")
+
 scalacOptions in Test ++= Seq("-Yrangepos")
 
 resolvers ++= Seq("snapshots", "releases").map(Resolver.sonatypeRepo)

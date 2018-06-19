@@ -8,6 +8,7 @@ class ImmutableByteArray(private val table: Array[Byte]) {
   def length: Int = table.length
   def asString(encoding: Charset): String = new String(table, encoding)
   def inputStream: InputStream = new ByteArrayInputStream(table)
+  def toByteArray: Array[Byte] = table.clone
 }
 
 object ImmutableByteArray {
