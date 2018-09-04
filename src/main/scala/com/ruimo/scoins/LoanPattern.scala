@@ -6,6 +6,29 @@ import java.io.Closeable
 import java.io.Reader
 import scala.language.implicitConversions
 
+
+/**
+  * If there is a case where your application does not open the
+  * resource, use this wrapper. The wrapper keeps track with the
+  * resource is used (opened) and closes the resource if it is opened
+  * or just ignores the close request.  Resource wrapper is not thread
+  * safe.
+  */
+class ResourceWrapper[T](resourceFactory: () => T)(implicit closer: T => Unit) extends AutoCloseable {
+  private[scoins] var resource: Option[T] = None
+  def apply(): T = resource match {
+    case Some(r) => r
+    case None => {
+      resource = Some(resourceFactory())
+      apply()
+    }
+  }
+
+  override def close() {
+    resource.foreach(r => closer(r))
+  }
+}
+
 object LoanPattern {
   def using[T, U](resource: T)(f: T => U)(implicit closer: T => Unit): Try[U] =
     Try(f(resource)) match {

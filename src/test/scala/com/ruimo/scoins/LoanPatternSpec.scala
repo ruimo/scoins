@@ -199,5 +199,28 @@ class LoanPatternSpec extends Specification {
 
       1 === 1
     }
+
+    "resource wrapper closes resource" in {
+      val resource = mock(classOf[Reader])
+
+      import LoanPattern._
+      using(new ResourceWrapper(() => resource)) { r =>
+        r() === resource
+      }
+
+      verify(resource).close()
+      1 === 1
+    }
+
+    "resource wrapper does not close resource when the resource is not used" in {
+      val resource = mock(classOf[Reader])
+
+      import LoanPattern._
+      using(new ResourceWrapper(() => resource)) { r =>
+      }
+
+      verify(resource, never()).close()
+      1 === 1
+    }
   }
 }
