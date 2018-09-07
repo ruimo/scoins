@@ -24,6 +24,10 @@ class ResourceWrapper[T](resourceFactory: () => T)(implicit closer: T => Unit) e
     }
   }
 
+  def foreach(f: T => Unit) {
+    resource.foreach(f)
+  }
+
   override def close() {
     resource.foreach(r => closer(r))
   }
