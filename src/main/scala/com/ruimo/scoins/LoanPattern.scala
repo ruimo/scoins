@@ -16,6 +16,7 @@ import scala.language.implicitConversions
   */
 class ResourceWrapper[T](resourceFactory: () => T)(implicit closer: T => Unit) extends AutoCloseable {
   private[scoins] var resource: Option[T] = None
+
   def apply(): T = resource match {
     case Some(r) => r
     case None => {
@@ -29,7 +30,11 @@ class ResourceWrapper[T](resourceFactory: () => T)(implicit closer: T => Unit) e
   }
 
   override def close() {
-    resource.foreach(r => closer(r))
+    try {
+      resource.foreach(r => closer(r))
+    } finally {
+      resource = None
+    }
   }
 }
 
