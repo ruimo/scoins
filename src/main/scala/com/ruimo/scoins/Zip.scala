@@ -1,5 +1,6 @@
 package com.ruimo.scoins
 
+import java.io.InputStream
 import java.nio.file.{Path, Files}
 import scala.collection.immutable
 import com.ruimo.scoins.LoanPattern.using
@@ -30,8 +31,17 @@ object Zip {
     zipFile: Path, toDir: Path, maxZipEntrySize: Long = 1024 * 1024 * 10,
     fileNameCharset: Charset = DefaultCharset
   ): Try[immutable.Seq[Path]] = using(
-    new ZipInputStream(new FileInputStream(zipFile.toFile), fileNameCharset)
-  ) { zis =>
+    new FileInputStream(zipFile.toFile)
+  ) { is =>
+    explodeStream(is, toDir, maxZipEntrySize, fileNameCharset, Some(zipFile))
+  } (zis => zis.close())
+
+  def explodeStream(
+    is: InputStream, toDir: Path, maxZipEntrySize: Long = 1024 * 1024 * 10,
+    fileNameCharset: Charset = DefaultCharset, zipFile: Option[Path] = None
+  ): immutable.Seq[Path] = {
+    val zis = new ZipInputStream(is, fileNameCharset)
+
     @tailrec def explode(explodedFiles: immutable.Seq[Path]): immutable.Seq[Path] = Option(zis.getNextEntry()) match {
       case None =>
         explodedFiles
@@ -39,8 +49,8 @@ object Zip {
         zis.closeEntry()
         explode(explodedFiles)
       case Some(ze) =>
-        assumeValidFileName(zipFile, ze.getName)
-        assumeValidSize(zipFile, ze, maxZipEntrySize)
+        assumeIfValidFileName(zipFile, ze.getName)
+        assumeIfValidSize(zipFile, ze, maxZipEntrySize)
         val toFile = toDir.resolve(ze.getName)
         Files.createDirectories(toFile.getParent)
         Files.copy(zis, toFile)
@@ -49,18 +59,30 @@ object Zip {
     }
 
     explode(immutable.Vector())
-  } (zis => zis.close())
+  }
 
-  // Check file entry name in zip file for vulnerability.
-  def assumeValidFileName(zipFile: Path, fileName: String) {
+  def assumeIfValidFileName(zipFile: Option[Path], fileName: String) {
     val f = (new File(fileName)).getCanonicalPath
     val cwd = (new File(".")).getCanonicalPath
     if (! f.startsWith(cwd))
-      throw new IOException("Invalid zip entry name: '" + fileName + "' in " + zipFile)
+      throw new IOException(
+        "Invalid zip entry name: '" + fileName + "'" + (zipFile.map(z => " in " + z).getOrElse(""))
+      )
+  }
+
+  def assumeIfValidSize(zipFile: Option[Path], zipEntry: ZipEntry, maxZipEntrySize: Long) {
+    if (maxZipEntrySize < zipEntry.getSize)
+      throw new IOException(
+        "Too big zip entry '" + zipEntry.getName + "'" + (zipFile.map(z => " in " + z).getOrElse(""))
+      )
+  }
+
+  // Check file entry name in zip file for vulnerability.
+  def assumeValidFileName(zipFile: Path, fileName: String) {
+    assumeIfValidFileName(Some(zipFile), fileName)
   }
 
   def assumeValidSize(zipFile: Path, zipEntry: ZipEntry, maxZipEntrySize: Long) {
-    if (maxZipEntrySize < zipEntry.getSize)
-      throw new IOException("Too big zip entry '" + zipEntry.getName + "' in " + zipFile)
+    assumeIfValidSize(Some(zipFile), zipEntry, maxZipEntrySize)
   }
 }
