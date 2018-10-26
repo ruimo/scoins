@@ -52,7 +52,6 @@ object PathUtil {
     tempDestructor: Path => Unit = deleteDir
   ): Try[U] = withTempPath(tempFactory, tempDestructor)(func)
 
-
   def withTempFile[U](
     prefix: Option[String], suffix: Option[String], attrs: FileAttribute[_]*
   )(
