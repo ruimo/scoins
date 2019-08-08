@@ -2,25 +2,19 @@ name := """scoins"""
 
 organization := "com.ruimo"
 
-crossScalaVersions := List("2.11.8", "2.12.3") 
+crossScalaVersions := List("2.11.8", "2.12.3", "2.13.0") 
 
 scalaVersion := "2.12.3"
 
 publishTo := Some(
   Resolver.file(
-    "recoengcommon",
+    "scoins",
     new File(Option(System.getenv("RELEASE_DIR")).getOrElse("/tmp"))
   )
 )
 
-// Change this to another test framework if you prefer
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.3" % "test"
-
-// Uncomment to use Akka
-//libraryDependencies += "com.typesafe.akka" % "akka-actor_2.11" % "2.3.3"
-
 libraryDependencies ++= Seq(
-  "org.specs2" %% "specs2-core" % "3.9.4" % "test",
+  "org.specs2" %% "specs2-core" % "4.7.0" % "test",
   "org.mockito" % "mockito-all" % "1.9.5" % "test"
 )
 

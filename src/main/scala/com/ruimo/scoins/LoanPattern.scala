@@ -38,6 +38,7 @@ class ResourceWrapper[T](resourceFactory: () => T)(implicit closer: T => Unit) e
   }
 }
 
+@deprecated("Use scala.util.Using instead.")
 object LoanPattern {
   def using[T, U](resource: T)(f: T => U)(implicit closer: T => Unit): Try[U] =
     Try(f(resource)) match {
