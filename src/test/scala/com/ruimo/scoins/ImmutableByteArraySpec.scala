@@ -41,5 +41,13 @@ class ImmutableByteArraySpec extends Specification {
       im.length === 2
       im.asString(StandardCharsets.UTF_8) === "Hi"
     }
+
+    "Empty" in {
+      ImmutableByteArray.Empty.length === 0
+    }
+
+    "as string with offset" in {
+      ImmutableByteArray(Array[Byte]('A', 'B', 'C')).asString(1, 2, StandardCharsets.ISO_8859_1) === "BC"
+    }
   }
 }
