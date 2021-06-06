@@ -33,14 +33,14 @@ case class VersionMajorMinor(majorVersion: VersionNo, minor: VersionNo, isSnapsh
   val minorVersion = Some(minor)
   val patchVersion = None
   def asSnapshot = copy(isSnapshot = true)
-  override def toString = majorVersion.value + "." + minor.value
+  override def toString = "" + majorVersion.value + "." + minor.value
 }
 
 case class VersionMajorMinorPatch(majorVersion: VersionNo, minor: VersionNo, patch: VersionNo, isSnapshot: Boolean) extends Version {
   val minorVersion = Some(minor)
   val patchVersion = Some(patch)
   def asSnapshot = copy(isSnapshot = true)
-  override def toString = majorVersion.value + "." + minor.value + "." + patch.value
+  override def toString = "" + majorVersion.value + "." + minor.value + "." + patch.value
 }
 
 object Version extends Ordering[Version] {

@@ -14,8 +14,8 @@ case class Percent(value: Double) extends AnyVal with Ordered[Percent] {
 object Percent {
   import scala.language.implicitConversions
 
-  implicit def toPercent(d: Double) = Percent(d)
-  implicit def toPercent(d: java.lang.Double) = Percent(d)
-  implicit def fromPercent(p: Percent) = p.value
+  implicit def toPercent(d: Double): Percent = Percent(d)
+  implicit def toPercent(d: java.lang.Double): Percent = Percent(d)
+  implicit def fromPercent(p: Percent): Double = p.value
 }
 

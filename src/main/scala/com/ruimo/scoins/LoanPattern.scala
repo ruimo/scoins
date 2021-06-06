@@ -25,11 +25,11 @@ class ResourceWrapper[T](resourceFactory: () => T)(implicit closer: T => Unit) e
     }
   }
 
-  def foreach(f: T => Unit) {
+  def foreach(f: T => Unit): Unit = {
     resource.foreach(f)
   }
 
-  override def close() {
+  override def close(): Unit = {
     try {
       resource.foreach(r => closer(r))
     } finally {
@@ -57,24 +57,24 @@ object LoanPattern {
       }
     }
 
-  implicit def autoCloseableCloser(resource: AutoCloseable) {
+  implicit def autoCloseableCloser(resource: AutoCloseable): Unit = {
     resource.close()
   }
 
-  implicit def closeableCloser(resource: Closeable) {
+  implicit def closeableCloser(resource: Closeable): Unit = {
     resource.close()
   }
 
   @deprecated("Use using instead.")
-  def withResource[T <% Closeable, U](resource: T)(f: T => U): Try[U] =
+  def withResource[T, U](resource: T)(f: T => U)(implicit toCloseable: T => Closeable): Try[U] =
     Try(f(resource)) match {
       case Success(v) => Try {
-        resource.close()
+        toCloseable(resource).close()
         v
       }
 
       case e: Failure[U] => Try {
-        resource.close()
+        toCloseable(resource).close()
       } match {
         case Success(_) => e
         case fail: Failure[_] => {
@@ -84,8 +84,8 @@ object LoanPattern {
       }
     }
 
-  def iteratorFromReader[T <% Reader, U](resource: T)(f: Iterator[Char] => U): Try[U] =
-    withResource(resource) { reader =>
+  def iteratorFromReader[T, U](resource: T)(f: Iterator[Char] => U)(implicit toReader: T => Reader): Try[U] =
+    withResource(toReader(resource)) { reader =>
       f(new Iterator[Char] {
         var ch: Int = -2 // -2 means buffer empty
 

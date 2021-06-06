@@ -7,7 +7,7 @@ import java.nio.file.attribute.BasicFileAttributes
 import java.io.IOException
 
 object PathUtil {
-  def deleteDir(dir: Path) {
+  def deleteDir(dir: Path): Unit = {
     Files.walkFileTree(dir, new SimpleFileVisitor[Path]() {
       override def visitFile(path: Path, attrs: BasicFileAttributes): FileVisitResult = {
         Files.delete(path)

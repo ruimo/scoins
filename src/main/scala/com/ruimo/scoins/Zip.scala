@@ -15,7 +15,7 @@ object Zip {
 
   def deflate(
     zipFile: Path, files: Seq[(String, Path)], fileNameCharset: Charset = DefaultCharset
-  ) {
+  ): Unit = {
     using(
       new ZipOutputStream(new FileOutputStream(zipFile.toFile), fileNameCharset)
     ) { zos =>
@@ -61,7 +61,7 @@ object Zip {
     explode(immutable.Vector())
   }
 
-  def assumeIfValidFileName(zipFile: Option[Path], fileName: String) {
+  def assumeIfValidFileName(zipFile: Option[Path], fileName: String): Unit = {
     val f = (new File(fileName)).getCanonicalPath
     val cwd = (new File(".")).getCanonicalPath
     if (! f.startsWith(cwd))
@@ -70,7 +70,7 @@ object Zip {
       )
   }
 
-  def assumeIfValidSize(zipFile: Option[Path], zipEntry: ZipEntry, maxZipEntrySize: Long) {
+  def assumeIfValidSize(zipFile: Option[Path], zipEntry: ZipEntry, maxZipEntrySize: Long): Unit = {
     if (maxZipEntrySize < zipEntry.getSize)
       throw new IOException(
         "Too big zip entry '" + zipEntry.getName + "'" + (zipFile.map(z => " in " + z).getOrElse(""))
@@ -78,11 +78,9 @@ object Zip {
   }
 
   // Check file entry name in zip file for vulnerability.
-  def assumeValidFileName(zipFile: Path, fileName: String) {
+  def assumeValidFileName(zipFile: Path, fileName: String): Unit =
     assumeIfValidFileName(Some(zipFile), fileName)
-  }
 
-  def assumeValidSize(zipFile: Path, zipEntry: ZipEntry, maxZipEntrySize: Long) {
+  def assumeValidSize(zipFile: Path, zipEntry: ZipEntry, maxZipEntrySize: Long): Unit =
     assumeIfValidSize(Some(zipFile), zipEntry, maxZipEntrySize)
-  }
 }

@@ -107,7 +107,7 @@ class LoanPatternSpec extends Specification {
       import LoanPattern.iteratorFromReader
 
       val r: Reader = new StringReader("")
-      iteratorFromReader(r) { z: Iterator[Char] =>
+      iteratorFromReader(r) { (z: Iterator[Char]) =>
         z.hasNext === false
       }.isSuccess === true
     }
@@ -116,7 +116,7 @@ class LoanPatternSpec extends Specification {
       import LoanPattern.iteratorFromReader
 
       val r: Reader = new StringReader("abc")
-      iteratorFromReader(r) { z: Iterator[Char] =>
+      iteratorFromReader(r) { (z: Iterator[Char]) =>
         z.hasNext === true
         z.next() === 'a'
 
@@ -136,7 +136,7 @@ class LoanPatternSpec extends Specification {
 
       import LoanPattern.iteratorFromReader
 
-      iteratorFromReader(resource) { z: Iterator[Char] =>
+      iteratorFromReader(resource) { (z: Iterator[Char]) =>
         z.hasNext
       } match {
         case Success(_) => failure
@@ -157,7 +157,7 @@ class LoanPatternSpec extends Specification {
 
       import LoanPattern.iteratorFromReader
 
-      iteratorFromReader(resource) { z: Iterator[Char] =>
+      iteratorFromReader(resource) { (z: Iterator[Char]) =>
         z.hasNext === true
         z.next === 'a'
 
@@ -183,7 +183,7 @@ class LoanPatternSpec extends Specification {
 
       import LoanPattern.iteratorFromReader
 
-      iteratorFromReader(resource) { z: Iterator[Char] =>
+      iteratorFromReader(resource) { (z: Iterator[Char]) =>
         z.hasNext === true
         z.next === 'a'
 
