@@ -1,6 +1,7 @@
 package com.ruimo.scoins
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
+import java.nio.charset.StandardCharsets.UTF_8
 
 import org.specs2.mutable.Specification
 
@@ -53,6 +54,14 @@ class StreamUtilSpec extends Specification {
       toAr.length === StreamUtil.CopyBufSize + 1
       toAr(0) === 11
       toAr(StreamUtil.CopyBufSize) === 22
+    }
+
+    "readAllBytes can read all bytes" in {
+      val in = new ByteArrayInputStream("ABCDEF".getBytes(UTF_8))
+      val arr = StreamUtil.readAllBytes(in)
+      arr.size === 6
+      arr(0) === 'A'
+      arr(5) === 'F'
     }
   }
 }

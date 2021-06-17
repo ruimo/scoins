@@ -1,6 +1,6 @@
 package com.ruimo.scoins
 
-import java.io.{InputStream, OutputStream}
+import java.io.{InputStream, OutputStream, ByteArrayOutputStream}
 
 import scala.annotation.tailrec
 
@@ -18,5 +18,11 @@ object StreamUtil {
     }
 
     copy()
+  }
+
+  def readAllBytes(is: InputStream): Array[Byte] = {
+    val os = new ByteArrayOutputStream()
+    copyStream(is, os)
+    os.toByteArray()
   }
 }
