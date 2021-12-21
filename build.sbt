@@ -24,15 +24,9 @@ scalacOptions := Seq("-unchecked", "-deprecation", "-feature")
 
 scalacOptions in Test ++= Seq("-Yrangepos")
 
-resolvers ++= Seq("snapshots", "releases").map(Resolver.sonatypeRepo)
-
-resolvers += "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases"
-
 licenses := Seq(
   "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")
 )
-
-pomIncludeRepository := { _ => false }
 
 developers := List(
   Developer(
@@ -42,8 +36,6 @@ developers := List(
     url("https://github.com/ruimo")
   )
 )
-
-versionScheme := Some("early-semver")
 
 scmInfo := Some(
   ScmInfo(
