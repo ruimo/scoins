@@ -1,7 +1,7 @@
 package com.ruimo.scoins
 
 import java.nio.file.{Files, Path}
-import javax.xml.bind.DatatypeConverter
+import jakarta.xml.bind.DatatypeConverter
 
 object Base64 {
   def encode(path: Path): String = encode(Files.readAllBytes(path))
