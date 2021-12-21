@@ -28,8 +28,6 @@ resolvers ++= Seq("snapshots", "releases").map(Resolver.sonatypeRepo)
 
 resolvers += "Scalaz Bintray Repo" at "https://dl.bintray.com/scalaz/releases"
 
-scalacOptions ++= Seq("-feature")
-
 licenses := Seq(
   "Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")
 )
