@@ -6,6 +6,10 @@ organization := "com.ruimo"
 
 description := "Tiny functions for Scala."
 
+sonatypeCredentialHost := "s01.oss.sonatype.org"
+
+sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
+
 crossScalaVersions := List("2.11.12", "2.12.14", "2.13.6", "3.0.0") 
 
 scalaVersion := "3.0.0"
@@ -50,5 +54,3 @@ scmInfo := Some(
   )
 )
 
-sonatypeCredentialHost := "s01.oss.sonatype.org"
-sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
