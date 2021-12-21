@@ -10,13 +10,6 @@ crossScalaVersions := List("2.11.12", "2.12.14", "2.13.6", "3.0.0")
 
 scalaVersion := "3.0.0"
 
-publishTo := Some(
-  Resolver.file(
-    "scoins",
-    new File(Option(System.getenv("RELEASE_DIR")).getOrElse("/tmp"))
-  )
-)
-
 libraryDependencies ++= Seq(
   "jakarta.xml.bind" % "jakarta.xml.bind-api" % "3.0.0",
   "org.specs2" % "specs2-core_2.13" % "4.12.0" % "test",
@@ -57,10 +50,5 @@ scmInfo := Some(
   )
 )
 
-publishTo := {
-  val nexus = "https://s01.oss.sonatype.org/"
-  if (isSnapshot.value) Some("snapshots" at nexus + "content/repositories/snapshots")
-  else Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
-
 sonatypeCredentialHost := "s01.oss.sonatype.org"
+sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
