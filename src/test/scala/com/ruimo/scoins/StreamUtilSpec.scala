@@ -12,7 +12,7 @@ class StreamUtilSpec extends AnyFlatSpec with should.Matchers {
     val to = new ByteArrayOutputStream()
 
     StreamUtil.copyStream(from, to)
-    to.toByteArray.length === 0
+    assert(to.toByteArray.length === 0)
   }
 
   it should "copy stream of less than copy buffer size" in {
@@ -21,11 +21,11 @@ class StreamUtilSpec extends AnyFlatSpec with should.Matchers {
 
     StreamUtil.copyStream(from, to)
     val ar = to.toByteArray
-    ar.length === 4
-    ar(0) === 0
-    ar(1) === 1
-    ar(2) === 2
-    ar(3) === 3
+    assert(ar.length === 4)
+    assert(ar(0) === 0)
+    assert(ar(1) === 1)
+    assert(ar(2) === 2)
+    assert(ar(3) === 3)
   }
 
   it should "copy stream of just buffer size" in {
@@ -37,9 +37,9 @@ class StreamUtilSpec extends AnyFlatSpec with should.Matchers {
 
     StreamUtil.copyStream(from, to)
     val toAr = to.toByteArray
-    toAr.length === StreamUtil.CopyBufSize
-    toAr(0) === 11
-    toAr(StreamUtil.CopyBufSize - 1) === 22
+    assert(toAr.length === StreamUtil.CopyBufSize)
+    assert(toAr(0) === 11)
+    assert(toAr(StreamUtil.CopyBufSize - 1) === 22)
   }
 
   it should "copy stream of over buffer size" in {
@@ -51,16 +51,16 @@ class StreamUtilSpec extends AnyFlatSpec with should.Matchers {
 
     StreamUtil.copyStream(from, to)
     val toAr = to.toByteArray
-    toAr.length === StreamUtil.CopyBufSize + 1
-    toAr(0) === 11
-    toAr(StreamUtil.CopyBufSize) === 22
+    assert(toAr.length === StreamUtil.CopyBufSize + 1)
+    assert(toAr(0) === 11)
+    assert(toAr(StreamUtil.CopyBufSize) === 22)
   }
 
   it should "readAllBytes can read all bytes" in {
     val in = new ByteArrayInputStream("ABCDEF".getBytes(UTF_8))
     val arr = StreamUtil.readAllBytes(in)
-    arr.size === 6
-    arr(0) === 'A'
-    arr(5) === 'F'
+    assert(arr.size === 6)
+    assert(arr(0) === 'A')
+    assert(arr(5) === 'F')
   }
 }

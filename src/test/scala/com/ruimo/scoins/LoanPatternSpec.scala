@@ -14,10 +14,10 @@ class LoanPatternSpec extends AnyFlatSpec with should.Matchers {
 
     val resource = new java.io.BufferedReader(new java.io.StringReader("Hello"))
     withResource(resource) { res =>
-      res.readLine === "Hello"
-      res.readLine === null
+      assert(res.readLine === "Hello")
+      assert(res.readLine === null)
       "World"
-    } === Success("World")
+    } should === (Success("World"))
   }
 
   it should "success for using" in {
@@ -26,10 +26,10 @@ class LoanPatternSpec extends AnyFlatSpec with should.Matchers {
 
     val resource = new java.io.BufferedReader(new java.io.StringReader("Hello"))
     using(resource) { res =>
-      res.readLine === "Hello"
-      res.readLine === null
+      assert(res.readLine === "Hello")
+      assert(res.readLine === null)
       "World"
-    } === Success("World")
+    } should === (Success("World"))
   }
 
   it should "access error and close ok" in {
@@ -41,10 +41,9 @@ class LoanPatternSpec extends AnyFlatSpec with should.Matchers {
     } match {
       case Success(_) => fail
       case f: Failure[_] =>
-        f.exception.getMessage === "World"
+        assert(f.exception.getMessage === "World")
     }
     verify(resource).close()
-    1 === 1
   }
 
   it should "access error and close ok for using" in {
@@ -57,10 +56,9 @@ class LoanPatternSpec extends AnyFlatSpec with should.Matchers {
     } match {
       case Success(_) => fail
       case f: Failure[_] =>
-        f.exception.getMessage === "World"
+        assert(f.exception.getMessage === "World")
     }
     verify(resource).close()
-    1 === 1
   }
 
   it should "access error and close error" in {
@@ -74,12 +72,11 @@ class LoanPatternSpec extends AnyFlatSpec with should.Matchers {
     } match {
       case Success(_) => fail
       case f: Failure[_] => {
-        f.exception.getMessage === "Close"
-        f.exception.getSuppressed().length === 1
-        f.exception.getSuppressed()(0).getMessage === "World"
+        assert(f.exception.getMessage === "Close")
+        assert(f.exception.getSuppressed().length === 1)
+        assert(f.exception.getSuppressed()(0).getMessage === "World")
       }
     }
-    1 === 1
   }
 
   it should "access error and close error for using" in {
@@ -94,12 +91,11 @@ class LoanPatternSpec extends AnyFlatSpec with should.Matchers {
     } match {
       case Success(_) => fail
       case f: Failure[_] => {
-        f.exception.getMessage === "Close"
-        f.exception.getSuppressed().length === 1
-        f.exception.getSuppressed()(0).getMessage === "World"
+        assert(f.exception.getMessage === "Close")
+        assert(f.exception.getSuppressed().length === 1)
+        assert(f.exception.getSuppressed()(0).getMessage === "World")
       }
     }
-    1 === 1
   }
 
   it should "access empty reader" in {
@@ -107,8 +103,8 @@ class LoanPatternSpec extends AnyFlatSpec with should.Matchers {
 
     val r: Reader = new StringReader("")
     iteratorFromReader(r) { (z: Iterator[Char]) =>
-      z.hasNext === false
-    }.isSuccess === true
+      assert(z.hasNext === false)
+    }.isSuccess should === (true)
   }
 
   it should "access reader" in {
@@ -116,17 +112,17 @@ class LoanPatternSpec extends AnyFlatSpec with should.Matchers {
 
     val r: Reader = new StringReader("abc")
     iteratorFromReader(r) { (z: Iterator[Char]) =>
-      z.hasNext === true
-      z.next() === 'a'
+      assert(z.hasNext === true)
+      assert(z.next() === 'a')
 
-      z.hasNext === true
-      z.next() === 'b'
+      assert(z.hasNext === true)
+      assert(z.next() === 'b')
 
-      z.hasNext === true
-      z.next() === 'c'
+      assert(z.hasNext === true)
+      assert(z.next() === 'c')
 
-      z.hasNext === false
-    }.isSuccess === true
+      assert(z.hasNext === false)
+    }.isSuccess should === (true)
   }
 
   it should "access error in reading the first char" in {
@@ -140,12 +136,11 @@ class LoanPatternSpec extends AnyFlatSpec with should.Matchers {
     } match {
       case Success(_) => fail
       case f: Failure[_] => {
-        f.exception.getMessage === "Error"
+        assert(f.exception.getMessage === "Error")
       }
     }
 
     verify(resource).close()
-    1 === 1
   }
 
   it should "access error in reading the second char" in {
@@ -157,19 +152,18 @@ class LoanPatternSpec extends AnyFlatSpec with should.Matchers {
     import LoanPattern.iteratorFromReader
 
     iteratorFromReader(resource) { (z: Iterator[Char]) =>
-      z.hasNext === true
-      z.next === 'a'
+      assert(z.hasNext === true)
+      assert(z.next === 'a')
 
       z.hasNext
     } match {
       case Success(_) => fail
       case f: Failure[_] => {
-        f.exception.getMessage === "Error"
+        assert(f.exception.getMessage === "Error")
       }
     }
 
     verify(resource).close()
-    1 === 1
   }
 
   it should "access error and close error in reading the second char" in {
@@ -183,20 +177,18 @@ class LoanPatternSpec extends AnyFlatSpec with should.Matchers {
     import LoanPattern.iteratorFromReader
 
     iteratorFromReader(resource) { (z: Iterator[Char]) =>
-      z.hasNext === true
-      z.next === 'a'
+      assert(z.hasNext === true)
+      assert(z.next === 'a')
 
       z.hasNext
     } match {
       case Success(_) => fail
       case f: Failure[_] => {
-        f.exception.getMessage === "Close"
-        f.exception.getSuppressed().length === 1
-        f.exception.getSuppressed()(0).getMessage === "Error"
+        assert(f.exception.getMessage === "Close")
+        assert(f.exception.getSuppressed().length === 1)
+        assert(f.exception.getSuppressed()(0).getMessage === "Error")
       }
     }
-
-    1 === 1
   }
 
   it should "resource wrapper closes resource" in {
@@ -204,11 +196,10 @@ class LoanPatternSpec extends AnyFlatSpec with should.Matchers {
 
     import LoanPattern._
     using(new ResourceWrapper(() => resource)) { r =>
-      r() === resource
+      assert(r() === resource)
     }
 
     verify(resource).close()
-    1 === 1
   }
 
   it should "resource wrapper does not close resource when the resource is not used" in {
@@ -219,6 +210,5 @@ class LoanPatternSpec extends AnyFlatSpec with should.Matchers {
     }
 
     verify(resource, never()).close()
-    1 === 1
   }
 }

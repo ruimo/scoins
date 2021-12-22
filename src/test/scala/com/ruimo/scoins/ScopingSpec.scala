@@ -7,15 +7,15 @@ class ScopingSpec extends AnyFlatSpec with should.Matchers {
   it should "Unit func" in {
     import Scoping.doWith
     doWith(10) {
-      i => i === 10
+      i => assert(i === 10)
     }
   }
 
   it should "Func returns value" in {
     import Scoping.doWith
     doWith(10) {
-      i => i === 10
+      i => assert(i === 10)
         i * 20
-    } === 200
+    } should === (200)
   }
 }

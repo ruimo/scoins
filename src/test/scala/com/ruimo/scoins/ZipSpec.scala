@@ -15,7 +15,6 @@ class ZipSpec extends AnyFlatSpec with should.Matchers {
       Zip.assumeValidFileName(Paths.get("testdata/invalidName.zip"), "/tmp/a")
     }
     Zip.assumeValidFileName(Paths.get("testdata/invalidName.zip"), "tmp/a")
-    1 === 1
   }
 
   it should "Can detect invalid entry." in {
@@ -38,11 +37,11 @@ class ZipSpec extends AnyFlatSpec with should.Matchers {
     val exploded: immutable.Seq[Path] = Zip.explode(Paths.get("testdata/a.zip"), dir).get
 
     try {
-      exploded.size === 1
-      exploded(0) === dir.resolve("a")
+      assert(exploded.size === 1)
+      assert(exploded(0) === dir.resolve("a"))
       val lines = Files.readAllLines(exploded(0))
-      lines.size === 1
-      lines.get(0) === "Hello"
+      assert(lines.size === 1)
+      assert(lines.get(0) === "Hello")
     }
     finally {
       Files.delete(exploded(0))
@@ -54,11 +53,11 @@ class ZipSpec extends AnyFlatSpec with should.Matchers {
     val dir = Files.createTempDirectory(null)
     val exploded: immutable.Seq[Path] = Zip.explode(Paths.get("testdata/b.zip"), dir).get
     try {
-      exploded.size === 1
-      exploded(0) === dir.resolve("foo/b")
+      assert(exploded.size === 1)
+      assert(exploded(0) === dir.resolve("foo/b"))
       val lines = Files.readAllLines(exploded(0))
-      lines.size === 1
-      lines.get(0) === "World"
+      assert(lines.size === 1)
+      assert(lines.get(0) === "World")
     }
     finally {
         Files.delete(exploded(0))
@@ -70,11 +69,11 @@ class ZipSpec extends AnyFlatSpec with should.Matchers {
   it should "Can explode Japanese file." in {
     val dir = Files.createTempDirectory(null)
     val exploded: immutable.Seq[Path] = Zip.explode(Paths.get("testdata/japanese.zip"), dir).get
-    exploded.size === 1
-    exploded(0) === dir.resolve("日本語.txt")
+    assert(exploded.size === 1)
+    assert(exploded(0) === dir.resolve("日本語.txt"))
     val lines = Files.readAllLines(exploded(0))
-    lines.size === 1
-    lines.get(0) === "test"
+    assert(lines.size === 1)
+    assert(lines.get(0) === "test")
   }
 
   it should "Can deflate files." in {
@@ -92,9 +91,9 @@ class ZipSpec extends AnyFlatSpec with should.Matchers {
 
       PathUtil.withTempDir(None) { out =>
         val outFiles = Zip.explode(zipFile, out).get
-        outFiles.size === 2
-        Files.readAllLines(out.resolve("foo/foo.txt")).get(0) === "foo"
-        Files.readAllLines(out.resolve("bar.txt")).get(0) === "bar"
+        assert(outFiles.size === 2)
+        assert(Files.readAllLines(out.resolve("foo/foo.txt")).get(0) === "foo")
+        assert(Files.readAllLines(out.resolve("bar.txt")).get(0) === "bar")
       }.get
     }.get
   }

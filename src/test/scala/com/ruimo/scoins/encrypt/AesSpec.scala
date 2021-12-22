@@ -14,7 +14,7 @@ class AesSpec extends AnyFlatSpec with should.Matchers {
     val encrypted = Aes.encrypt(key.getBytes("UTF-8"), iv.getBytes("UTF-8"), text.getBytes("UTF-8"))
     encrypted !== text.getBytes("UTF-8")
 
-    Aes.decrypt(key.getBytes("UTF-8"), iv.getBytes("UTF-8"), encrypted) === text.getBytes("UTF-8")
+    assert(Aes.decrypt(key.getBytes("UTF-8"), iv.getBytes("UTF-8"), encrypted) === text.getBytes("UTF-8"))
     Aes.decrypt(key.getBytes("UTF-8"), "6543210987654321".getBytes("UTF-8"), encrypted) !== text.getBytes("UTF-8")
     assertThrows[GeneralSecurityException] {
       Aes.decrypt("No AESEncryptKey".getBytes("UTF-8"), iv.getBytes("UTF-8"), encrypted)
@@ -29,13 +29,13 @@ class AesSpec extends AnyFlatSpec with should.Matchers {
 
     val encrypted = aes.encrypt(text.getBytes("UTF-8"))
     encrypted !== text.getBytes("UTF-8")
-    aes.decrypt(encrypted) === text.getBytes("UTF-8")
+    assert(aes.decrypt(encrypted) === text.getBytes("UTF-8"))
   }
 
   it should "toLength works" in {
-    Aes.toLength(Array[Byte](0, 1, 2), 3) === Array[Byte](0, 1, 2)
-    Aes.toLength(Array[Byte](0, 1, 2), 2) === Array[Byte](0, 1)
-    Aes.toLength(Array[Byte](0, 1, 2), 7) === Array[Byte](0, 1, 2, 0, 1, 2, 0)
+    assert(Aes.toLength(Array[Byte](0, 1, 2), 3) === Array[Byte](0, 1, 2))
+    assert(Aes.toLength(Array[Byte](0, 1, 2), 2) === Array[Byte](0, 1))
+    assert(Aes.toLength(Array[Byte](0, 1, 2), 7) === Array[Byte](0, 1, 2, 0, 1, 2, 0))
   }
 }
 

@@ -6,16 +6,16 @@ import org.scalatest.matchers.should
 
 class PaginationSpec extends AnyFlatSpec with should.Matchers {
   "Pagination" should "not needed if page count is one.." in {
-      val pr = PagedRecords[Int](
-        currentPage = 0,
-        pageSize = 10,
-        pageCount = 1,
-        orderBy = OrderBy("col"),
-        records = Seq()
-      )
+    val pr = PagedRecords[Int](
+      currentPage = 0,
+      pageSize = 10,
+      pageCount = 1,
+      orderBy = OrderBy("col"),
+      records = Seq()
+    )
 
-      Pagination.get(pr) === None
-    }
+    assert(Pagination.get(pr) === None)
+  }
 
   it should "Threshold - 1 pages." in {
     val threshold = 5
@@ -28,9 +28,8 @@ class PaginationSpec extends AnyFlatSpec with should.Matchers {
     )
 
     (0 until threshold).foreach { i =>
-      Pagination.get(pr.copy(currentPage = i)) === Some(Pagination(false, false, 0, threshold - 1))
+      assert(Pagination.get(pr.copy(currentPage = i)) === Some(Pagination(false, false, 0, threshold - 1)))
     }
-    1 === 1
   }
 
   it should "Threshold pages." in {
@@ -44,9 +43,8 @@ class PaginationSpec extends AnyFlatSpec with should.Matchers {
     )
 
     (0 until threshold).foreach { i =>
-      Pagination.get(pr.copy(currentPage = i)) === Some(Pagination(false, false, 0, threshold))
+      assert(Pagination.get(pr.copy(currentPage = i)) === Some(Pagination(false, false, 0, threshold)))
     }
-    1 === 1
   }
 
   it should "Threshold + 1 pages." in {
@@ -60,22 +58,22 @@ class PaginationSpec extends AnyFlatSpec with should.Matchers {
     )
 
     // [0] 1 2 3 4 ... 5
-    Pagination.get(pr) === Some(Pagination(false, true, 0, threshold))
+    assert(Pagination.get(pr) === Some(Pagination(false, true, 0, threshold)))
 
     // 0 [1] 2 3 4 ... 5
-    Pagination.get(pr.copy(currentPage = 1)) === Some(Pagination(false, true, 0, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 1)) === Some(Pagination(false, true, 0, threshold)))
 
     // 0 1 [2] 3 4 ... 5
-    Pagination.get(pr.copy(currentPage = 2)) === Some(Pagination(false, true, 0, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 2)) === Some(Pagination(false, true, 0, threshold)))
 
     // 0 .. 1 2 [3] 4 5
-    Pagination.get(pr.copy(currentPage = 3)) === Some(Pagination(true, false, 1, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 3)) === Some(Pagination(true, false, 1, threshold)))
 
     // 0 .. 1 2 3 [4] 5
-    Pagination.get(pr.copy(currentPage = 4)) === Some(Pagination(true, false, 1, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 4)) === Some(Pagination(true, false, 1, threshold)))
 
     // 0 .. 1 2 3 4 [5]
-    Pagination.get(pr.copy(currentPage = 5)) === Some(Pagination(true, false, 1, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 5)) === Some(Pagination(true, false, 1, threshold)))
   }
 
   it should "Threshold + 2 pages." in {
@@ -89,25 +87,25 @@ class PaginationSpec extends AnyFlatSpec with should.Matchers {
     )
 
     // [0] 1 2 3 4 ... 6
-    Pagination.get(pr) === Some(Pagination(false, true, 0, threshold))
+    assert(Pagination.get(pr) === Some(Pagination(false, true, 0, threshold)))
 
     // 0 [1] 2 3 4 ... 6
-    Pagination.get(pr.copy(currentPage = 1)) === Some(Pagination(false, true, 0, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 1)) === Some(Pagination(false, true, 0, threshold)))
 
     // 0 1 [2] 3 4 ... 6
-    Pagination.get(pr.copy(currentPage = 2)) === Some(Pagination(false, true, 0, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 2)) === Some(Pagination(false, true, 0, threshold)))
 
     // 0 .. 1 2 [3] 4 5 ... 6
-    Pagination.get(pr.copy(currentPage = 3)) === Some(Pagination(true, true, 1, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 3)) === Some(Pagination(true, true, 1, threshold)))
 
     // 0 .. 2 3 [4] 5 6
-    Pagination.get(pr.copy(currentPage = 4)) === Some(Pagination(true, false, 2, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 4)) === Some(Pagination(true, false, 2, threshold)))
 
     // 0 .. 2 3 4 [5] 6
-    Pagination.get(pr.copy(currentPage = 5)) === Some(Pagination(true, false, 2, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 5)) === Some(Pagination(true, false, 2, threshold)))
 
     // 0 .. 2 3 4 5 [6]
-    Pagination.get(pr.copy(currentPage = 6)) === Some(Pagination(true, false, 2, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 6)) === Some(Pagination(true, false, 2, threshold)))
   }
 
   it should "Threshold + 3 pages." in {
@@ -121,27 +119,27 @@ class PaginationSpec extends AnyFlatSpec with should.Matchers {
     )
 
     // [0] 1 2 3 4 ... 7
-    Pagination.get(pr) === Some(Pagination(false, true, 0, threshold))
+    assert(Pagination.get(pr) === Some(Pagination(false, true, 0, threshold)))
 
     // 0 [1] 2 3 4 ... 7
-    Pagination.get(pr.copy(currentPage = 1)) === Some(Pagination(false, true, 0, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 1)) === Some(Pagination(false, true, 0, threshold)))
 
     // 0 1 [2] 3 4 ... 7
-    Pagination.get(pr.copy(currentPage = 2)) === Some(Pagination(false, true, 0, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 2)) === Some(Pagination(false, true, 0, threshold)))
 
     // 0 .. 1 2 [3] 4 5 ... 7
-    Pagination.get(pr.copy(currentPage = 3)) === Some(Pagination(true, true, 1, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 3)) === Some(Pagination(true, true, 1, threshold)))
 
     // 0 .. 2 3 [4] 5 6 ... 7
-    Pagination.get(pr.copy(currentPage = 4)) === Some(Pagination(true, true, 2, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 4)) === Some(Pagination(true, true, 2, threshold)))
 
     // 0 .. 3 4 [5] 6 7
-    Pagination.get(pr.copy(currentPage = 5)) === Some(Pagination(true, false, 3, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 5)) === Some(Pagination(true, false, 3, threshold)))
 
     // 0 .. 3 4 5 [6] 7
-    Pagination.get(pr.copy(currentPage = 6)) === Some(Pagination(true, false, 3, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 6)) === Some(Pagination(true, false, 3, threshold)))
 
     // 0 .. 3 4 5 6 [7]
-    Pagination.get(pr.copy(currentPage = 6)) === Some(Pagination(true, false, 3, threshold))
+    assert(Pagination.get(pr.copy(currentPage = 6)) === Some(Pagination(true, false, 3, threshold)))
   }
 }
