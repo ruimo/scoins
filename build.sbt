@@ -6,7 +6,7 @@ inThisBuild(
     description := "Tiny functions for Scala.",
     sonatypeCredentialHost := "s01.oss.sonatype.org",
     sonatypeRepository := "https://s01.oss.sonatype.org/service/local",
-    crossScalaVersions := List("2.12.14", "2.13.6", "3.0.0"),
+    crossScalaVersions := List("2.11.12", "2.12.15", "2.13.7", "3.0.2"),
     libraryDependencies ++= Seq(
       "jakarta.xml.bind" % "jakarta.xml.bind-api" % "3.0.0",
       "org.scalatest" %% "scalatest" % "3.2.10" % Test,
@@ -31,7 +31,10 @@ inThisBuild(
         url("https://github.com/ruimo/scoins"),
         "scm:git@github.com:ruimo/scoins.git"
       )
-    )
+    ),
+    sonatypeCredentialHost := "s01.oss.sonatype.org",
+    sonatypeRepository := "https://s01.oss.sonatype.org/service/local",
+    releaseProcess -= publishArtifacts
   )
 )
 
