@@ -1,5 +1,8 @@
-inThisBuild(
-  Seq(
+import ReleaseTransformations._
+
+lazy val root = project
+  .in(file("."))
+  .settings(
     name := """scoins""",
     homepage := Some(url("https://github.com/ruimo/scoins")),
     organization := "com.ruimo",
@@ -36,5 +39,4 @@ inThisBuild(
     sonatypeRepository := "https://s01.oss.sonatype.org/service/local",
     releaseProcess -= publishArtifacts
   )
-)
 
