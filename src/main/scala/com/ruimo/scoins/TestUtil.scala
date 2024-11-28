@@ -109,13 +109,14 @@ object TestUtil {
               throw new RuntimeException(
                 s"'${file0.toAbsolutePath}' and '${file1.toAbsolutePath} are differ (at line: ${line}). file0 content: '$l0', file1 content: '$l1'"
               )
+            } else {
               loop(line + 1)
             }
           }
         }
 
         loop()
-      }
-    }
+      }.get
+    }.get
   }
 }

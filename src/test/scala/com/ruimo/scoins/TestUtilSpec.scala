@@ -71,7 +71,7 @@ class TestUtilSpec extends Specification {
         Files.write(file0, Array[Byte](0, 1, 2))
         Files.write(file1, Array[Byte](0, 1, 3))
 
-        TestUtil.compareFile(file0, file1, TestUtil.CompareMode.Binary) must throwA[RuntimeException]
+        TestUtil.compareFile(file0, file1, TestUtil.CompareMode.Binary) must throwA[TestUtil.BinaryFileDifferException]
       }.get
     }.get
     1 === 1

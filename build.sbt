@@ -10,7 +10,6 @@ inThisBuild(
     libraryDependencies ++= Seq(
       "jakarta.xml.bind" % "jakarta.xml.bind-api" % "3.0.0",
       "org.specs2" %% "specs2-core" % "4.20.9" % Test,
-      "org.mockito" % "mockito-all" % "1.9.5" % Test
     ),
     scalacOptions := Seq("-unchecked", "-deprecation", "-feature"),
     Test / scalacOptions ++= Seq("-Yrangepos"),
