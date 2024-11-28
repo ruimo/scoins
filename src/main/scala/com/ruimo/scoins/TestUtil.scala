@@ -9,6 +9,7 @@ import java.io.FileInputStream
 import com.ruimo.scoins.LoanPattern._
 import scala.annotation.tailrec
 import java.io.FileReader
+import java.io.InputStreamReader
 
 object TestUtil {
   class BinaryFileDifferException(file0: Path, file1: Path, offset: Long)
@@ -85,13 +86,13 @@ object TestUtil {
   }
 
   def compareTextFile(file0: Path, file1: Path, charset: Option[Charset]): Unit = {
-    val fileReader0Factory: () => FileReader = () => charset match {
+    val fileReader0Factory: () => InputStreamReader = () => charset match {
       case None => new FileReader(file0.toFile)
-      case Some(cs) => new FileReader(file0.toFile, cs)
+      case Some(cs) => new InputStreamReader(new FileInputStream(file0.toFile), cs)
     }
-    val fileReader1Factory: () => FileReader = () => charset match {
+    val fileReader1Factory: () => InputStreamReader = () => charset match {
       case None => new FileReader(file1.toFile)
-      case Some(cs) => new FileReader(file1.toFile, cs)
+      case Some(cs) => new InputStreamReader(new FileInputStream(file1.toFile), cs)
     }
     
     LoanPattern.using(new BufferedReader(fileReader0Factory())) { br0 =>
