@@ -100,4 +100,16 @@ class TestUtilSpec extends Specification {
     }.get
     1 === 1
   }
+
+  "Files are identical in text mode" in {
+    PathUtil.withTempDir(None) { dir0 =>
+      PathUtil.withTempDir(None) { dir1 =>
+        Files.write(dir0.resolve("file0"), "A\r\nB".getBytes())
+        Files.write(dir1.resolve("file0"), "A\nB".getBytes())
+
+        TestUtil.compareDir(dir0, dir1, TestUtil.CompareMode.Text())
+      }.get
+    }.get
+    1 === 1
+  }
 }

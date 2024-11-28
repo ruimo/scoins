@@ -31,7 +31,7 @@ object TestUtil {
     
     Files.walkFileTree(dir0, new SimpleFileVisitor[Path]() {
       override def visitFile(file0: Path, attrs: BasicFileAttributes): FileVisitResult = {
-        val relativePath: Path = file0.relativize(dir0)
+        val relativePath: Path = dir0.relativize(file0)
         val file1 = dir1.resolve(relativePath)
         
         relativePathTbl += relativePath
@@ -43,9 +43,9 @@ object TestUtil {
 
     Files.walkFileTree(dir1, new SimpleFileVisitor[Path]() {
       override def visitFile(file1: Path, attrs: BasicFileAttributes): FileVisitResult = {
-        val relativePath: Path = file1.relativize(dir1)
+        val relativePath: Path = dir1.relativize(file1)
         if (! relativePathTbl.contains(relativePath))
-          throw new RuntimeException("'${file1.toAbsolutePath}' exists but ${dir0.resolve(relativePath).toAbsolutePath} does not exist. Relative path: '${relativePath}'")
+          throw new RuntimeException(s"'${file1.toAbsolutePath}' exists but ${dir0.resolve(relativePath).toAbsolutePath} does not exist. Relative path: '${relativePath}'")
 
         FileVisitResult.CONTINUE
       }
