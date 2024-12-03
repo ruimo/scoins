@@ -60,5 +60,21 @@ object PathUtil {
     tempFactory: () => Path =
       () => Files.createTempFile(prefix.orNull, suffix.orNull, attrs: _*),
     tempDestructor: Path => Unit = Files.delete
-  ): Try[U] = withTempPath(tempFactory, tempDestructor)(func)
+    ): Try[U] = withTempPath(tempFactory, tempDestructor)(func)
+    
+    def copyDirs(fromDir: Path, toDir: Path): Unit = {
+      Files.createDirectories(toDir)
+      Files.walkFileTree(fromDir, new SimpleFileVisitor[Path]() {
+        override def preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult = {
+          val targetDir = toDir.resolve(fromDir.relativize(dir))
+          Files.createDirectories(targetDir)
+          FileVisitResult.CONTINUE
+        }
+        override def visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult = {
+          val targetFile = toDir.resolve(fromDir.relativize(file))
+          Files.copy(file, targetFile)
+          FileVisitResult.CONTINUE
+        }
+      })
+    }
 }
