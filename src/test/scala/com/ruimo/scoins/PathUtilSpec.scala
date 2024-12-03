@@ -25,10 +25,10 @@ class PathUtilSpec extends Specification {
     PathUtil.withTempDir(None) { dir0 => 
       val from = dir0.resolve("from")
       Files.createDirectories(from)
-      Files.writeString(from.resolve("a"), "a")
+      Files.write(from.resolve("a"), "a".getBytes())
       val b = from.resolve("b")
       Files.createDirectories(b)
-      Files.writeString(b.resolve("c"), "c")
+      Files.write(b.resolve("c"), "c".getBytes())
 
       PathUtil.withTempDir(None) { dir1 =>
         val to = dir1.resolve("to")
@@ -36,8 +36,8 @@ class PathUtilSpec extends Specification {
         PathUtil.copyDirs(from, to)
         assert(Files.isDirectory(to) === true)
         assert(Files.list(to).toArray().length === 2)
-        assert(Files.readString(to.resolve("a")) === "a")
-        assert(Files.readString(to.resolve("b/c")) === "c")
+        assert(Files.readAllBytes(to.resolve("a")) === "a".getBytes())
+        assert(Files.readAllBytes(to.resolve("b/c")) === "c".getBytes())
       }
     }
     1 === 1
