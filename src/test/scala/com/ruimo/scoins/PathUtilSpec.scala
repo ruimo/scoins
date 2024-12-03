@@ -15,7 +15,7 @@ class PathUtilSpec extends Specification {
         
         PathUtil.copyDirs(from, to)
         assert(Files.isDirectory(to) === true)
-        assert(Files.list(to).toList().size() === 0)
+        assert(Files.list(to).toArray().length === 0)
       }
     }
     1 === 1
@@ -35,7 +35,7 @@ class PathUtilSpec extends Specification {
         
         PathUtil.copyDirs(from, to)
         assert(Files.isDirectory(to) === true)
-        assert(Files.list(to).toList().size() === 2)
+        assert(Files.list(to).toArray().length === 2)
         assert(Files.readString(to.resolve("a")) === "a")
         assert(Files.readString(to.resolve("b/c")) === "c")
       }
